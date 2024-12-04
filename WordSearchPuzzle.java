@@ -40,6 +40,6 @@ public class WordSearchPuzzle implements WordSearchInterface {
         }
 
         grid[row][col] = current;  // Unmark as visited
-        return true;
+        return false;
     }
 }
