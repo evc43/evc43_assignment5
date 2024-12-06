@@ -9,37 +9,43 @@ public class WordSearchPuzzle implements WordSearchInterface {
             throw new IndexOutOfBoundsException("One or more indices are out of bounds.");
         }
 
-        // Perform a depth-first search (DFS) or breadth-first search (BFS)
-        // to find a path with strictly increasing alphabetical order.
-        return dfs(grid, startRow, startCol, endRow, endCol, Character.MIN_VALUE);
+        // Use a visited array to track visited cells
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        
+        // Perform a depth-first search (DFS)
+        return dfs(grid, startRow, startCol, endRow, endCol, Character.MIN_VALUE, visited);
     }
 
-    private boolean dfs(char[][] grid, int row, int col, int targetRow, int targetCol, char prevChar) {
+    private boolean dfs(char[][] grid, int row, int col, int targetRow, int targetCol, char prevChar, boolean[][] visited) {
+        // Base case: if we reach the target cell
         if (row == targetRow && col == targetCol) {
             return true;
         }
 
-        // Temporarily mark the cell as visited
-        char current = grid[row][col];
-        if (current <= prevChar) {
+        // Check bounds and if the current cell is valid
+        if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length ||
+            visited[row][col] || grid[row][col] <= prevChar) {
             return false;
         }
-        
-        grid[row][col] = '*';  // Mark as visited
-        
+
+        // Mark the current cell as visited
+        visited[row][col] = true;
+
+        // Offsets for 8 possible directions
         int[] rowOffsets = {-1, -1, -1, 0, 0, 1, 1, 1};
         int[] colOffsets = {-1, 0, 1, -1, 1, -1, 0, 1};
 
+        // Explore all 8 directions
         for (int i = 0; i < 8; i++) {
             int newRow = row + rowOffsets[i];
             int newCol = col + colOffsets[i];
-            if (newRow >= 0 && newRow < grid.length && newCol >= 0 && newCol < grid[0].length &&
-                grid[newRow][newCol] != '*' && dfs(grid, newRow, newCol, targetRow, targetCol, current)) {
+            if (dfs(grid, newRow, newCol, targetRow, targetCol, grid[row][col], visited)) {
                 return true;
             }
         }
 
-        grid[row][col] = current;  // Unmark as visited
+        // Backtrack: unmark the current cell
+        visited[row][col] = false;
         return false;
     }
 }
