@@ -2,15 +2,14 @@ public class WordSearchPuzzle implements WordSearchInterface {
 
     @Override
     public boolean isIncreasingSequencePossible(char[][] grid, int startRow, int startCol, int endRow, int endCol) {
-        // Validate indices
+        
         if (startRow < 0 || startCol < 0 || endRow < 0 || endCol < 0 ||
             startRow >= grid.length || startCol >= grid[0].length ||
             endRow >= grid.length || endCol >= grid[0].length) {
             throw new IndexOutOfBoundsException("One or more indices are out of bounds.");
         }
 
-        // Perform a depth-first search (DFS) or breadth-first search (BFS)
-        // to find a path with strictly increasing alphabetical order.
+        
         return dfs(grid, startRow, startCol, endRow, endCol, Character.MIN_VALUE);
     }
 
@@ -19,13 +18,13 @@ public class WordSearchPuzzle implements WordSearchInterface {
             return true;
         }
 
-        // Temporarily mark the cell as visited
+        
         char current = grid[row][col];
         if (current <= prevChar) {
             return false;
         }
         
-        grid[row][col] = '*';  // Mark as visited
+        grid[row][col] = '*'; 
         
         int[] rowOffsets = {-1, -1, -1, 0, 0, 1, 1, 1};
         int[] colOffsets = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -39,7 +38,7 @@ public class WordSearchPuzzle implements WordSearchInterface {
             }
         }
 
-        grid[row][col] = current;  // Unmark as visited
-        return false;
+        grid[row][col] = current;  
+        return true;
     }
 }
